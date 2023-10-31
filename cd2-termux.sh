@@ -86,6 +86,38 @@ INSTALL() {
   rm -rf $HOME/clouddrive.tgz
 }
 
+get-local-ipv4-using-hostname() {
+  hostname -I 2>&- | awk '{print $1}'
+}
+
+# iproute2
+get-local-ipv4-using-iproute2() {
+  # OR ip route get 1.2.3.4 | awk '{print $7}'
+  ip -4 route 2>&- | awk '{print $NF}' | grep -Eo --color=never '[0-9]+(\.[0-9]+){3}'
+}
+
+# net-tools
+get-local-ipv4-using-ifconfig() {
+  ( ifconfig 2>&- || ip addr show 2>&- ) | grep -Eo '^\s+inet\s+\S+' | grep -Eo '[0-9]+(\.[0-9]+){3}' | grep -Ev '127\.0\.0\.1|0\.0\.0\.0'
+}
+
+# 获取本机 IPv4 地址
+get-local-ipv4() {
+  set -o pipefail
+  get-local-ipv4-using-hostname || get-local-ipv4-using-iproute2 || get-local-ipv4-using-ifconfig
+}
+get-local-ipv4-select() {
+  local ips=$(get-local-ipv4)
+  local retcode=$?
+  if [ $retcode -ne 0 ]; then
+      return $retcode
+  fi
+  grep -m 1 "^192\." <<<"$ips" || \
+  grep -m 1 "^172\." <<<"$ips" || \
+  grep -m 1 "^10\." <<<"$ips" || \
+  head -n 1 <<<"$ips"
+}
+
 SESSIONS() {
   if [[ "$CHECK_ROOT" == "root" ]]; then
     cd_start="sudo ./clouddrive"
@@ -108,7 +140,8 @@ SUCCESS() {
 \x83\xa0${GREEN_COLOR}\x31\x30\x30\xe5\x85\x83${RES}"
   echo -e "\xe4\xbc\x98\xe6\x83\xa0\xe7\xa0\x81\xef\xbc\x9a${GREEN_COLOR}\x58\x6d\x33\x4b\x32\x35\x44\x33${RES}\r\n"
   echo -e "${GREEN_COLOR}clouddrive2 安装成功！${RES}"
-  echo -e "访问地址：${GREEN_COLOR}http://YOUR_IP:19798/${RES}\r\n"
+  echo -e "${YELLOW_COLOR}重启 termux 后生效${RES}"
+  echo -e "访问地址：${GREEN_COLOR}http://$(get-local-ipv4-select):19798/${RES}\r\n"
 }
 
 UNINSTALL() {
