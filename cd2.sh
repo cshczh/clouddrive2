@@ -328,12 +328,12 @@ UNINSTALL() {
       if [[ "$check_procd" == "exist" ]]; then
         /etc/init.d/clouddrive stop
         /etc/init.d/clouddrive disable
-        rm -rf /etc/init.d/clouddrive	
+        rm -rf $INSTALL_PATH "/etc/init.d/clouddrive"	
       else
         systemctl stop clouddrive >/dev/null 2>&1
         systemctl disable clouddrive >/dev/null 2>&1
         echo -e "${GREEN_COLOR}清除残留文件${RES}"
-        rm -rf $INSTALL_PATH /etc/systemd/system/clouddrive.service
+        rm -rf $INSTALL_PATH "/etc/systemd/system/clouddrive.service"
         systemctl daemon-reload
       fi
     fi
