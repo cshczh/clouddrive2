@@ -74,13 +74,20 @@ elif [ "$ARCH" == "UNKNOWN" ]; then
   echo -e "\r\n${RED_COLOR}出错了${RES}，一键安装目前仅支持 x86_64和arm64 平台。\r\n"
   exit 1
 elif ! command -v systemctl >/dev/null 2>&1; then
-  if command -v docker >/dev/null 2>&1; then
-    if command -v opkg >/dev/null 2>&1; then
+  if command -v opkg >/dev/null 2>&1; then
+    if command -v docker >/dev/null 2>&1; then
       check_docker="exist"
     else
-      echo -e "\r\n${RED_COLOR}出错了，无法确定你当前的 Linux 发行版。${RES}\r\n"
-      exit 1
+      if [ -e "/sbin/procd" ]; then
+        check_procd="exist"
+      else
+        echo -e "\r\n${RED_COLOR}出错了，无法确定你当前的 Linux 发行版。${RES}\r\n"
+        exit 1
+      fi
     fi
+  else
+    echo -e "\r\n${RED_COLOR}出错了，无法确定你当前的 Linux 发行版。${RES}\r\n"
+    exit 1
   fi
 else
   if command -v netstat >/dev/null 2>&1; then
@@ -186,9 +193,62 @@ DOCKER() {
   fi
 }
 
+get-local-ipv4-using-hostname() {
+  hostname -I 2>&- | awk '{print $1}'
+}
+
+# iproute2
+get-local-ipv4-using-iproute2() {
+  # OR ip route get 1.2.3.4 | awk '{print $7}'
+  ip -4 route 2>&- | awk '{print $NF}' | grep -Eo --color=never '[0-9]+(\.[0-9]+){3}'
+}
+
+# net-tools
+get-local-ipv4-using-ifconfig() {
+  ( ifconfig 2>&- || ip addr show 2>&- ) | grep -Eo '^\s+inet\s+\S+' | grep -Eo '[0-9]+(\.[0-9]+){3}' | grep -Ev '127\.0\.0\.1|0\.0\.0\.0'
+}
+
+# 获取本机 IPv4 地址
+get-local-ipv4() {
+  set -o pipefail
+  get-local-ipv4-using-hostname || get-local-ipv4-using-iproute2 || get-local-ipv4-using-ifconfig
+}
+get-local-ipv4-select() {
+  local ips=$(get-local-ipv4)
+  local retcode=$?
+  if [ $retcode -ne 0 ]; then
+      return $retcode
+  fi
+  grep -m 1 "^192\." <<<"$ips" || \
+  grep -m 1 "^172\." <<<"$ips" || \
+  grep -m 1 "^10\." <<<"$ips" || \
+  head -n 1 <<<"$ips"
+}
 
 SESSIONS() {
 if [[ "$os_type" == "Linux" ]]; then
+  if [[ "$check_procd" == "exist" ]]; then
+    touch /etc/init.d/clouddrive
+    cat > /etc/init.d/clouddrive << EOF
+#!/bin/sh /etc/rc.common
+
+USE_PROCD=1
+
+START=99
+STOP=99
+
+start_service() {
+    procd_open_instance
+    procd_set_param command $INSTALL_PATH/clouddrive
+    procd_set_param respawn
+    procd_set_param pidfile /var/run/clouddrive.pid
+    procd_close_instance
+}
+EOF
+    chmod +x /etc/init.d/clouddrive
+    /etc/init.d/clouddrive start
+    /etc/init.d/clouddrive enable
+  else
   cat >/etc/systemd/system/clouddrive.service <<EOF
   [Unit]
   Description=clouddrive service
@@ -207,6 +267,7 @@ EOF
   systemctl daemon-reload
   systemctl start clouddrive >/dev/null 2>&1
   systemctl enable clouddrive >/dev/null 2>&1
+  fi
 elif [[ "$os_type" == "Darwin" ]]; then
   cat >$HOME/Library/LaunchAgents/clouddrive.plist <<EOF
   <?xml version="1.0" encoding="UTF-8"?>
@@ -242,7 +303,7 @@ SUCCESS() {
 \x83\xa0${GREEN_COLOR}\x31\x30\x30\xe5\x85\x83${RES}"
   echo -e "\xe4\xbc\x98\xe6\x83\xa0\xe7\xa0\x81\xef\xbc\x9a${GREEN_COLOR}\x58\x6d\x33\x4b\x32\x35\x44\x33${RES}\r\n"
   echo -e "${GREEN_COLOR}clouddrive2 安装成功！${RES}"
-  echo -e "访问地址：${GREEN_COLOR}http://YOUR_IP:19798/${RES}\r\n"
+  echo -e "访问地址：${GREEN_COLOR}http://$(get-local-ipv4-select):19798/${RES}\r\n"
 }
 
 UNINSTALL() {
@@ -264,11 +325,17 @@ UNINSTALL() {
       rm -rf $INSTALL_PATH $HOME/Library/LaunchAgents/clouddrive.plist
       launchctl load $HOME/Library/LaunchAgents/clouddrive.plist >/dev/null 2>&1
     else
-      systemctl disable clouddrive >/dev/null 2>&1
-      systemctl stop clouddrive >/dev/null 2>&1
-      echo -e "${GREEN_COLOR}清除残留文件${RES}"
-      rm -rf $INSTALL_PATH /etc/systemd/system/clouddrive.service
-      systemctl daemon-reload
+      if [[ "$check_procd" == "exist" ]]; then
+        /etc/init.d/clouddrive stop
+        /etc/init.d/clouddrive disable
+        rm -rf /etc/init.d/clouddrive	
+      else
+        systemctl stop clouddrive >/dev/null 2>&1
+        systemctl disable clouddrive >/dev/null 2>&1
+        echo -e "${GREEN_COLOR}清除残留文件${RES}"
+        rm -rf $INSTALL_PATH /etc/systemd/system/clouddrive.service
+        systemctl daemon-reload
+      fi
     fi
   fi
   echo -e "\r\n${GREEN_COLOR}clouddrive2 已在系统中移除！${RES}\r\n"
