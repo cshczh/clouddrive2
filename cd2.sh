@@ -171,7 +171,7 @@ DOCKER() {
   if [ "$check_docker" == "exist" ]; then
     mount --make-shared $(df -P / | tail -1 | awk '{ print $6 }')
     echo -e "${GREEN_COLOR}正在下载 clouddrive 镜像，请稍候...${RES}"
-    docker pull dockerproxy.com/cloudnas/clouddrive2:latest 
+    docker pull cloudnas/clouddrive2:latest 
     docker run -d \
     --name clouddrive \
     --restart unless-stopped \
@@ -183,7 +183,7 @@ DOCKER() {
     --pid host \
     --privileged \
     --device /dev/fuse:/dev/fuse \
-    dockerproxy.com/cloudnas/clouddrive2:latest 
+    cloudnas/clouddrive2:latest 
     if [ $? -eq 0 ]; then
       echo "clouddrive 容器已成功运行"
     else
