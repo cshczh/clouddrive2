@@ -27,9 +27,10 @@
 支持
 - [X] Linux
 - [X] MacOS
-- [X] OpenWRT-docker
+- [X] OpenWRT
 - [X] Android-Termux
 - [X] 理论上支持所有安装了 docker 的设备如: iStore OS
+- [X] 理论上支持所有 OpenWRT 及其衍生的系统
 
 ## 安装
 ### 安装命令

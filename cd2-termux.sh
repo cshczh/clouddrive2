@@ -34,9 +34,16 @@ fi
 ARCH="UNKNOWN"
 
 if [ "$platform" = "x86_64" ]; then
-  ARCH=amd64
+  ARCH="x86_64"
+elif [ "$platform" = "arm64" ]; then
+  ARCH="aarch64"
 elif [ "$platform" = "aarch64" ]; then
-  ARCH=arm64
+  ARCH="aarch64"
+elif [ "$platform" = "armv7l" ]; then
+  ARCH="armv7"
+else
+  echo -e "${RED_COLOR}不支持的架构${RES}"
+  exit 1
 fi
 
 pkg install termux-services -y
@@ -65,7 +72,7 @@ INSTALL() {
   # Download clouddrive2
   mkdir -p $HOME/clouddrive
   INSTALL_PATH=$HOME/clouddrive
-  clouddrive_version=$(curl -s https://api.github.com/repos/cloud-fs/cloud-fs.github.io/releases/latest | grep -Eo "\s\"name\": \"clouddrive-2-android-$platform-.+?\.tgz\"" | awk -F'"' '{print $4}')
+  clouddrive_version=$(curl -s https://api.github.com/repos/cloud-fs/cloud-fs.github.io/releases/latest | grep -Eo "\s\"name\": \"clouddrive-2-android-$ARCH-.+?\.tgz\"" | awk -F'"' '{print $4}')
   echo -e "\r\n${GREEN_COLOR}下载 clouddrive2 $VERSION ...${RES}"
   curl -L https://ghproxy.com/https://github.com/cloud-fs/cloud-fs.github.io/releases/latest/download/$clouddrive_version -o $HOME/clouddrive.tgz $CURL_BAR
   if [ $? -eq 0 ]; then
