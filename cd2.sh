@@ -125,7 +125,7 @@ INSTALL() {
   if [[ "$os_type" == "Darwin" ]]; then
     fuse_version=$(curl -s https://api.github.com/repos/osxfuse/osxfuse/releases/latest | grep -Eo '\s\"name\": \"macfuse-.+?\.dmg\"' | awk -F'"' '{print $4}')
     echo -e "\r\n${GREEN_COLOR}下载 macFUSE $VERSION ...${RES}"
-    curl -L https://ghproxy.com/https://github.com/osxfuse/osxfuse/releases/latest/download/$fuse_version -o /tmp/macfuse.dmg $CURL_BAR
+    curl -L https://gh-proxy.com/https://github.com/osxfuse/osxfuse/releases/latest/download/$fuse_version -o /tmp/macfuse.dmg $CURL_BAR
     sudo spctl --master-disable
     if [ $? -eq 0 ]; then
       echo -e "macFUSE 下载完成"
@@ -141,7 +141,7 @@ INSTALL() {
   # Download clouddrive2
   clouddrive_version=$(curl -s https://api.github.com/repos/cloud-fs/cloud-fs.github.io/releases/latest | grep -Eo "\s\"name\": \"clouddrive-2-$os-$platform-.+?\.tgz\"" | awk -F'"' '{print $4}')
   echo -e "\r\n${GREEN_COLOR}下载 clouddrive2 $VERSION ...${RES}"
-  curl -L https://ghproxy.com/https://github.com/cloud-fs/cloud-fs.github.io/releases/latest/download/$clouddrive_version -o /tmp/clouddrive.tgz $CURL_BAR
+  curl -L https://gh-proxy.com/https://github.com/cloud-fs/cloud-fs.github.io/releases/latest/download/$clouddrive_version -o /tmp/clouddrive.tgz $CURL_BAR
   if [ $? -eq 0 ]; then
     echo -e "clouddrive 下载完成"
   else

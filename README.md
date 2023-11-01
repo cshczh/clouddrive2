@@ -39,12 +39,12 @@ Mac、Linux、OpenWRT等 在「终端」运行下面的「命令」
 不知道在哪里运行这些命令？[点击查看](#在哪运行)
 
 ```shell
-curl -fsSL "https://ghproxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2.sh" | bash -s install
+curl -fsSL "https://gh-proxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2.sh" | bash -s install
 ```
 
 ### 卸载命令
 ```shell
-curl -fsSL "https://ghproxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2.sh" | bash -s uninstall
+curl -fsSL "https://gh-proxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2.sh" | bash -s uninstall
 ```
 
 ## 安卓
@@ -52,17 +52,17 @@ curl -fsSL "https://ghproxy.com/https://raw.githubusercontent.com/sublaim/cloudd
 
 ### 安装 (未ROOT设备)
 ```shell
-curl -fsSL "https://ghproxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2-termux.sh" | bash -s install
+curl -fsSL "https://gh-proxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2-termux.sh" | bash -s install
 ```
 
 ### 安装 (已ROOT设备)
 ```shell
-curl -fsSL "https://ghproxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2-termux.sh" | bash -s install root
+curl -fsSL "https://gh-proxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2-termux.sh" | bash -s install root
 ```
 
 ### 卸载
 ```shell
-curl -fsSL "https://ghproxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2-termux.sh" | bash -s uninstall
+curl -fsSL "https://gh-proxy.com/https://raw.githubusercontent.com/sublaim/clouddrive2/main/cd2-termux.sh" | bash -s uninstall
 ```
 
 ## 如何更新?
@@ -111,3 +111,6 @@ QQ群：943950333
 cd2安装在了哪里?   
 > PC平台默认安装在 /opt/clouddrive/  
 > 安卓默认安装在/data/data/com.termux/files/home/clouddrive/
+  
+提示：curl: (35) Recv failure: Connection reset by peer  
+> 重启「终端」  
