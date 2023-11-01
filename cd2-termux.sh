@@ -57,7 +57,14 @@ INSTALL() {
   # Download FUSE
   if [[ "$CHECK_ROOT" == "root" ]]; then
     echo -e "\r\n${GREEN_COLOR}下载 FUSE $VERSION ...${RES}"
-    curl -L https://xdaforums.com/attachments/fusermount_arm64-v8a-zip.4641672/ -o $HOME/fuse.zip $CURL_BAR
+    if [[ "$ARCH" == "aarch64" ]]; then
+      curl -L https://xdaforums.com/attachments/fusermount_arm64-v8a-zip.4641672/ -o $HOME/fuse.zip $CURL_BAR
+    elif [[ "$ARCH" == "armv7" ]]; then
+      curl -L https://xdaforums.com/attachments/fusermount_armeabi-v7a-zip.4641674/ -o $HOME/fuse.zip $CURL_BAR
+    else
+      echo -e "${RED_COLOR}不支持的架构${RES}"
+    fi
+    
     if [ $? -eq 0 ]; then
       echo -e "FUSE 下载完成"
     else
