@@ -135,4 +135,4 @@ cd2安装在了哪里?
 ## 问题反馈群
 QQ群：943950333
 
-<img src="./images/QRcode.png" width="50%">
+<img src="./images/QRcode.png" width="20%">
