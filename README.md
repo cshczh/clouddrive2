@@ -2,22 +2,28 @@
 脚本非官方出品，由于官方帮助不适合新手故写此脚本。指在帮助新手用户快速使用 clouddrive2 挂载网盘。
  
 ## 目录
-- [推荐码](#推荐码)
-- [安装](#安装)
-  - [安装命令](#安装命令)
-  - [卸载命令](#卸载命令)
-- [安卓](#安卓)
-  - [安装 (未ROOT设备)](#安装-未root设备)
-  - [安装 (已ROOT设备)](#安装-已root设备)
-  - [卸载](#卸载)
-- [如何更新?](#如何更新)
-- [在哪运行？](#在哪运行)
-  - [OpenWRT](#openwrt)
-  - [Mac](#mac)
-  - [Linux](#linux)
-  - [安卓](#安卓-1)
-- [问题反馈群](#问题反馈群)
-- [问与答](#问与答)
+- [一键安装 Clouddrive2 脚本](#一键安装-clouddrive2-脚本)
+  - [目录](#目录)
+  - [推荐码](#推荐码)
+  - [安装](#安装)
+    - [安装命令](#安装命令)
+    - [卸载命令](#卸载命令)
+  - [安卓](#安卓)
+    - [安装 (未ROOT设备)](#安装-未root设备)
+    - [安装 (已ROOT设备)](#安装-已root设备)
+    - [卸载](#卸载)
+  - [如何更新?](#如何更新)
+  - [在哪运行？](#在哪运行)
+    - [OpenWRT](#openwrt)
+    - [Mac](#mac)
+    - [Linux](#linux)
+    - [安卓](#安卓-1)
+  - [问与答](#问与答)
+    - [通规问题](#通规问题)
+    - [安装问题](#安装问题)
+    - [安装后问题](#安装后问题)
+    - [安卓问题](#安卓问题)
+  - [问题反馈群](#问题反馈群)
 
 ## 推荐码
 使用推荐码购买cd2会员最高可以优惠100元  
@@ -75,6 +81,7 @@ curl -fsSL "https://gh-proxy.com/https://raw.githubusercontent.com/sublaim/cloud
 ## 在哪运行？
 ### OpenWRT
 在左侧菜单里一般有「终端」或「TTYD 终端」，登录用户名一般为root，密码为你的OP密码。  
+如果没有, 请使用 ssh 连接.
 
 <img src="./images/op1.png" width="50%">
 
@@ -91,26 +98,41 @@ curl -fsSL "https://gh-proxy.com/https://raw.githubusercontent.com/sublaim/cloud
 <img src="./images/mac2.png" width="70%">   
 
 ### Linux
-Linux 跟 openwrt 差不多
+Linux 桌面环境下的「终端」名称不同, 可自行查找
 
 ### 安卓
 打开「Termux」输入命令
 
 <img src="./images/termux.png" width="20%">
 
-## 问题反馈群
-QQ群：943950333
-
 ## 问与答
+这里解决的问题主要来源于群友的反馈
+
+### 通规问题
 是否需要开代理？  
 > 不需要。脚本已内置了镜像加速。
  
-为什么termux无法挂载？  
-> 非Root用户无法挂载。
- 
 cd2安装在了哪里?   
-> PC平台默认安装在 /opt/clouddrive/  
+> docker默认挂载点在 /CloudNAS  
 > 安卓默认安装在/data/data/com.termux/files/home/clouddrive/
-  
+> 其它平台默认安装在 /opt/clouddrive/  
+
+### 安装问题
 提示：curl: (35) Recv failure: Connection reset by peer  
 > 重启「终端」  
+
+### 安装后问题
+登录一直提示连接超时
+> 用「卸载命令」再重装
+
+### 安卓问题
+为什么 termux 无法挂载网盘到本地？  
+> 非Root用户无法挂载。
+  
+非 root 设备可以用 root 命令吗？  
+> 不可以，用了会无法启动。
+ 
+## 问题反馈群
+QQ群：943950333
+
+<img src="./images/QRcode.png" width="50%">
