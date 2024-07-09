@@ -57,17 +57,17 @@ curl -fsSL "https://https://raw.githubusercontent.com/cshczh/clouddrive2/main/cd
 
 ### 安装 (未ROOT设备)
 ```shell
-curl -fsSL "https://raw.githubusercontent.com/cshczh/clouddrive2/main/cd2.sh" | bash -s install
+curl -fsSL "https://raw.githubusercontent.com/cshczh/clouddrive2/main/cd2-termux.sh" | bash -s install
 ```
 
 ### 安装 (已ROOT设备)
 ```shell
-curl -fsSL "https://raw.githubusercontent.com/cshczh/clouddrive2/main/cd2.sh" | bash -s install root
+curl -fsSL "https://raw.githubusercontent.com/cshczh/clouddrive2/main/cd2-termux.sh" | bash -s install root
 ```
 
 ### 卸载
 ```shell
-curl -fsSL "https://raw.githubusercontent.com/cshczh/clouddrive2/main/cd2.sh" | bash -s uninstall
+curl -fsSL "https://raw.githubusercontent.com/cshczh/clouddrive2/main/cd2-termux.sh" | bash -s uninstall
 ```
 
 ## 如何更新?
