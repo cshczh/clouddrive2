@@ -1,7 +1,7 @@
 现官方clouddrive2已有app
 请关注cd2频道：
-https://t.me/cloud_nas
-此脚本原作者好像删库了~之前fork的
+https://t.me/cloud_nas /n
+此脚本仓库原作者好像删库了~我是之前fork的
 改掉链接还可用,就先这么留着了【若是用不了请翻墙或者自己在http前+镜像加速链接】
 # 一键安装 Clouddrive2 脚本
 脚本非官方出品，由于官方帮助不适合新手故写此脚本。指在帮助新手用户快速使用 clouddrive2 挂载网盘。
